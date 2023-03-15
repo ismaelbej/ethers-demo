@@ -15,12 +15,16 @@ describe("Lock", function () {
     const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS;
 
     // Contracts are deployed using the first signer/account by default
-    const [owner, otherAccount] = await ethers.getSigners();
+    const [firstAccount, otherAccount, thirdAccount] = await ethers.getSigners();
 
-    const Lock = await ethers.getContractFactory("Lock");
+    console.log(`1: ${firstAccount.address}`)
+    console.log(`2: ${otherAccount.address}`)
+    console.log(`3: ${thirdAccount.address}`)
+
+    const Lock = await ethers.getContractFactory("Lock", thirdAccount);
     const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
 
-    return { lock, unlockTime, lockedAmount, owner, otherAccount };
+    return { lock, unlockTime, lockedAmount, owner: thirdAccount, otherAccount };
   }
 
   describe("Deployment", function () {
